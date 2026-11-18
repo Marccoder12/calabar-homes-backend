@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import authRouter from "./auth/route.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors({
 // Request parsing
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -32,9 +34,13 @@ app.use("/api", limiter);
 app.get("/api/health", (req, res) => {
     res.json({
         success: true,
-        message: "API is running"
+        message: "API Sha de run"
     });
 });
+
+app.use("/api/auth", authRouter);
+
+
 
 // 404 handler
 app.use((req, res) => {
@@ -54,7 +60,5 @@ app.use((err, req, res, next) => {
     });
 });
 
-
-app.use("/api/auth", authRouter);
 
 export default app;

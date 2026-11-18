@@ -1,15 +1,34 @@
-import { registerUser } from "./service.js";
+import { loginUser, registerUser } from "./service.js";
 
-export const register = async (req, res, next) => {
+export const register = async (req, res) => {
     try{
         const { firstname, lastname, email, password } = req.body;
-        await registerUser({ firstname, lastname, email, password }, res, next);
+        await registerUser({ firstname: firstname, lastname: lastname, email: email, password: password });
         res.status(201).json({
             success: true,
             message: "User registered successfully"
         });
-        next();
     } catch (error) {
-        next(error);
+        console.log("Error: ", error);
+    }
+}
+
+
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const result = await loginUser({email: email, password: password});
+
+        res.status(200).cookie("session", result.token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                maxAge: 3 * 24 * 60 * 60 * 1000,
+                path: "/"
+            }
+        ).json({status: "success", message: "User Logged in successfully"})
+    } catch (error) {
+        console.log("Error: ", error);
+    
     }
 }
