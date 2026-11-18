@@ -32,3 +32,8 @@ export const login = async (req, res) => {
     
     }
 }
+
+
+export const changeRole = async(req, res) => {
+
+}
