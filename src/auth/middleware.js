@@ -24,8 +24,7 @@ try {
                 sessions.id AS session_id,
                 sessions.expires_at,
                 users.id AS user_id,
-                users.firstname,
-                users.lastname,
+                users.fullname,
                 users.email,
                 users.role
             FROM sessions
@@ -45,8 +44,7 @@ try {
         // 5. Attach authenticated user to request
         req.user = {
             id: session.user_id,
-            firstname: session.firstname,
-            lastname: session.lastname,
+            fullname: session.fullname,
             email: session.email,
             role: session.role
         };

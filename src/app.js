@@ -7,11 +7,18 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "https://calabar-admin.vercel.app"
+];
+
 // Security
 app.use(helmet());
 
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: allowedOrigins,
     credentials: true
 }));
 
@@ -28,7 +35,25 @@ const limiter = rateLimit({
     legacyHeaders: false
 });
 
-app.use("/api", limiter);
+app.use((req, res, next) => {
+    const start = Date.now();
+
+    console.log("\n================================");
+    console.log(`[${new Date().toLocaleTimeString()}] INCOMING REQUEST`);
+    console.log(`${req.method} ${req.originalUrl}`);
+    console.log("IP:", req.ip);
+
+    res.on("finish", () => {
+        console.log(
+            `RESPONSE: ${res.statusCode} | ${Date.now() - start}ms`
+        );
+        console.log("================================\n");
+    });
+
+    next();
+});
+app.use("/api", limiter); 
+
 
 // Routes
 app.get("/api/health", (req, res) => {
