@@ -4,6 +4,8 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import authRouter from "./auth/route.js";
 import cookieParser from "cookie-parser";
+import businessRouter from "./features/business/route.js";
+import storageRouter from "./storage/route.js";
 
 const app = express();
 
@@ -11,6 +13,7 @@ const allowedOrigins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "http://localhost:3000",
+    "http://localhost:5500",
     "https://calabar-admin.vercel.app"
 ];
 
@@ -54,6 +57,9 @@ app.use((req, res, next) => {
 });
 app.use("/api", limiter); 
 
+app.use('/uploads', express.static('uploads'));
+
+// app.post
 
 // Routes
 app.get("/api/health", (req, res) => {
@@ -64,8 +70,8 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRouter);
-
-
+app.use("/api/business", businessRouter);
+app.use("/api/storage", storageRouter);
 
 // 404 handler
 app.use((req, res) => {

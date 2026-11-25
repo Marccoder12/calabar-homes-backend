@@ -1,3 +1,4 @@
+import db from "../db/schema.js";
 import crypto from "node:crypto";
 
 export const authenticate = (req, res, next) => {

@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 console.log("URL: ", import.meta.url);
 // Database location
-const objPath = path.resolve(__dirname, "../../data/storage/s");
+export const objPath = path.resolve(__dirname, "../../data/storage/s");
 const avatarsPath = path.resolve(__dirname, "../../data/storage/avatars/s");
 const obj = path.resolve(__dirname, "../../data/storage/avatars/s");
 
